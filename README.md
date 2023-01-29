@@ -24,7 +24,7 @@ You need to specify the server, user and password for the MQTT broker. A user-na
 Note: There is no parameter checking, so if you get anything wrong the add-on will not start.
 
 # Homeassistant configuation
-Add the following to your configuration.yaml file changing the unit serial number to match the one returned by your device (this is reported in the logs) :
+Add the following to your configuration.yaml file changing the unit serial number to match the one returned by your device (this is reported in the logs). The cpm value is probably the only one most people need, the rest are there just because they are reported back by the hardware:
 
 ```
 mqtt:
