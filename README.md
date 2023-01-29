@@ -1,8 +1,10 @@
 # GQ Radiation Monitor Interface
 
-This is a first pass at adding a GQ GMC-320 radiation monitor to homeassistant. It shroud work with other devices from the same manufacturer.
+This is a first pass at adding a GQ GMC-320 radiation monitor to homeassistant. It should work with other devices from the same manufacturer.
 
 The device is attached to the HA machine via a USB port, where it will appear as a USB serial device. The code then queries the monitor on a regular period and publishes the returned data to the specified MQTT broker.
+
+Note: While this works, I still have a few things to figure out like the correct format for automatic MQTT device discovery and how a single sensor can report multiple values before there will be a second release. Currently this is just a place holder to hold a backup of my code while I work on it!
 
 ## Building / Installation
 
