@@ -1,4 +1,4 @@
-# GQ Radation Monitor Interface
+# GQ Radiation Monitor Interface
 
 This is a first pass at adding a GQ GMC-320 radiation monitor to homeassistant. It shroud work with other devices from the same manufacturer.
 
