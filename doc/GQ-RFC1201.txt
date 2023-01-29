@@ -1,0 +1,204 @@
+***************************************************
+GQ-RFC1201
+
+GQ Geiger Counter Communication Protocol
+***************************************************
+Ver 1.10
+
+
+Status of this Memo
+
+   This document specifies a GQ GMC Geiger Counter Communication Protocol for the
+   communication between GQ GMC Geiger Counter and a computer host via serial port, and requests discussion and suggestions for
+   improvements.  Distribution of this memo is unlimited.
+
+Copyright Notice
+
+   Copyright (C) GQ Electronics LLC (2012).  All Rights Reserved.
+
+Abstract
+
+   This document defines a GQ GMC Geiger Counter Communication Protocol
+   to support communication between GMC Geiger Counter and a computer host via serial port.  The protocol allows to send data request command from a computer host to a GQ GMC geiger counter. 
+
+
+**************************
+Serial Port configuration
+**************************
+
+The serial port communication is based on a fixed baud rate.
+
+Baud: 57600
+Data bit: 8
+Parity: None
+Stop bit: 1
+Control: None
+
+
+**************************
+Command format
+**************************
+
+A valid command start with ASCII '<'  and ended with ASCII '>>'. Both command and parameters are in between '<' and '>>'.
+
+Command is a ASCII string. All parameters of command are true value in hexadecimal. 
+
+
+Direction: All commands are initiated from computer(HOST).
+
+
+**************************
+Commands
+**************************
+
+1. Get hardware model and version
+
+Command:  <GETVER>>
+
+
+Return:   total 14 bytes ASCII chars from GQ GMC unit. It includes 7 bytes hardware model and 7 bytes firmware version.
+
+	  e.g.:  GMC-300Re 2.10   
+
+Firmware supported:  GMC-280, GMC-300 Re.2.0x, Re.2.10 or later
+
+
+2. Get current CPM value
+
+
+Command:  <GETCPM>>
+
+Return:   A 16 bit unsigned integer is returned. In total 2 bytes data return from GQ GMC unit. The first byte is MSB byte data and second byte is LSB byte data.
+
+	  e.g.: 00 1C     the returned CPM is 28.
+
+Firmware supported:  GMC-280, GMC-300 Re.2.0x, Re.2.10 or later
+
+
+
+3. Turn on the GQ GMC heartbeat
+
+Note:     This command enable the GQ GMC unit to send count per second data to host every second automatically. 
+
+Command:  <HEARTBEAT1>>
+
+Return:   A 16 bit unsigned integer is returned every second automatically. Each data package consist of 2 bytes data from GQ GMC unit. The first byte is MSB byte data and second byte is LSB byte data.
+
+
+	 e.g.: 10 1C     the returned 1 second count is 28.   Only lowest 14 bits are used for the valid data bit.  The highest bit 15 and bit 14 are reserved data bits.
+
+
+
+Firmware supported:  GMC-280, GMC-300  Re.2.10 or later
+
+
+4. Turn off the GQ GMC heartbeat
+
+
+Command:  <HEARTBEAT0>>
+
+Return:   None
+
+Firmware supported:  Re.2.10 or later
+
+
+5. Get battery voltage status
+
+
+Command:  <GETVOLT>>
+
+Return:   one byte voltage value of battery (X 10V)
+
+          e.g.: return 62(hex) is 9.8V
+
+Firmware supported:  GMC-280, GMC-300 Re.2.0x, Re.2.10 or later
+
+
+6. Request history data from internal flash memory
+
+Command:  <SPIR[A2][A1][A0][L1][L0]>>
+
+	A2,A1,A0 are three bytes address data, from MSB to LSB.  The L1,L0 are the data length requested.  L1 is high byte of 16 bit integer and L0 is low byte.
+	
+	The length normally not exceed 4096 bytes in each request.
+ 
+Return: The history data in raw byte array.
+
+Comment: The minimum address is 0, and maximum address value is the size of the flash memory of the GQ GMC Geiger count. Check the user manual for particular model flash size.
+
+Firmware supported:  GMC-300 Re.2.0x, Re.2.10 or later
+
+ 
+7. Get configuration data
+
+Command:  <GETCFG>>
+
+Return: The configuration data.  Total 256 bytes will be returned.
+
+
+Firmware supported:  GMC-280, GMC-300 Re.2.10 or later
+
+
+
+8. Erase all configuration data 
+
+Command:  <ECFG>>
+
+Return: 0xAA 
+
+Firmware supported: GMC-280, GMC-300 Re.2.10 or later
+
+
+9. Write configuration data
+
+Command:  <WCFG[A0][D0]>>
+	
+	A0 is the address and the D0 is the data byte(hex).  
+
+Return: 0xAA 
+
+Firmware supported: GMC-280, GMC-300 Re.2.10 or later
+
+
+
+10. send a key
+
+Command:  <key[D0]>>
+	
+	D0 is the key value from 0 to 3. It represents software key S1~S4.  
+Return: none 
+
+Firmware supported:  GMC-280, GMC-300 Re.2.0x, Re.2.10 or later
+
+Note: for Re.2.11 or later, each key can be a ASCII string: <KEY0>>,<KEY1>>,<KEY2>>,<KEY3>>   
+
+
+  
+11. get serial number
+
+Command: <GETSERIAL>>
+
+Return: serial number in 7 bytes. 
+
+Firmware supported: GMC-280, GMC-300 Re.2.11 or later
+
+
+
+12. Power OFF
+
+Command: <POWEROFF>>
+
+Return: none
+
+Firmware supported: GMC-280, GMC-300 Re.2.11 or later
+
+
+13. Reload/Update/Refresh Configuration
+
+
+Command: <CFGUPDATE>>
+
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.20 or later
+

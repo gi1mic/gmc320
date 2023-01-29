@@ -1,0 +1,35 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start gmc320 service
+# ==============================================================================
+CONFIG_PATH=/data/options.json
+
+PORT="$(bashio::config 'port')"
+MQTT_SERVER="$(bashio::config 'mqtt_server')"
+MQTT_PORT="$(bashio::config 'mqtt_port')"
+MQTT_USER="$(bashio::config 'mqtt_user')"
+MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
+DELAY="$(bashio::config 'repeat')"
+
+bashio::log.info "Starting gmc3xx"
+
+# Get the device serial number
+SERIAL=$(gmc320 ${PORT} | jq -r .serial)
+bashio::log.info "Device serial number: ${SERIAL}"
+
+# Send homeassistant MQTT discovery message
+#bashio::log.info "Sending MQTT discovery message"
+#mosquitto_pub -r -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}/config" -m '{ "state_topic": "homeassistant/sensor/gmc3xx_${SERIAL}/state","cpm": {"name": "Radation", "device_class": None, "unit_of_measurement": "cpm", "icon": "mdi:radioactive", "state_class": "measurement"},"battery": {"name": "Battery", "device_class": "battery", "unit_of_measurement": "%", "icon": None, "state_class": "measurement"}, "temperature": {"name": "Temperature", "device_class": "temperature", "unit_of_measurement": "°C", "icon": None, "state_class": "measurement"} }'
+
+# 'x': {'name': 'x', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
+# 'y': {'name': 'y', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
+# 'z': {'name': 'z', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
+
+
+# Send the readings
+bashio::log.info "Start sending data"
+while true; do
+	DATA=$(gmc320 ${PORT})
+	mosquitto_pub -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}" -m "${DATA}"
+	sleep ${DELAY}
+done

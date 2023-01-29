@@ -1,0 +1,5 @@
+docker run \
+  --rm \
+  -v /tmp/my_test_data:/data \
+  -p 1883 \
+  local/gmc320

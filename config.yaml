@@ -1,0 +1,29 @@
+name: "GMC 3xx Radation Monitor"
+description: "Radation Monitor Sensor Interface"
+version: "1.0.0"
+slug: "gmc3xx_monitor"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+options:
+  port: "/dev/ttyUSB0"
+  mqtt_server: "localhost"
+  mqtt_port: 1883
+  mqtt_user: "user"
+  mqtt_password: "password"
+  repeat: "60"
+schema:
+  port: str
+  mqtt_server: str
+  mqtt_port: int
+  mqtt_user: str
+  mqtt_password: str
+  repeat: int
+init: false
+startup: once
+uart: true
+host_network: true
+video: false
