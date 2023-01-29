@@ -1,8 +1,8 @@
 # GQ Radation Monitor Interface
 
-This is a first pass at adding a GQ GMC-320 radation monitor to homeassistant. It shoud work with other devices from the same manufacturer.
+This is a first pass at adding a GQ GMC-320 radiation monitor to homeassistant. It shroud work with other devices from the same manufacturer.
 
-The device is attached to the HA machine via a USB port, where it will appear as a USB serial device. The code then queries the monitor on a regulay period and publishes the returned data to the specified MQTT broker.
+The device is attached to the HA machine via a USB port, where it will appear as a USB serial device. The code then queries the monitor on a regular period and publishes the returned data to the specified MQTT broker.
 
 ## Building / Installation
 
@@ -17,7 +17,7 @@ The following should be added to you HA build via the addon store.
 
 ## Addon Configuration
 
-You need to specify the server, user and password for the MQTT broker. A username and password is mandatory. The server defaults to localhost:1883.
+You need to specify the server, user and password for the MQTT broker. A user-name and password is mandatory. The server defaults to localhost:1883.
 
 Note: There is no parameter checking, so if you get anything wrong the add-on will not start.
 
@@ -63,7 +63,5 @@ mqtt:
 
 ## Running
 
-The application will automatically run if a GQ radation monitor is attached via serial USB serial port and a configured MQTT broker is available.
-The GQ ratation monitor is polled every 60 seconds unless the "repeat" option is changed.
-
-
+The application will automatically run if a GQ radiation monitor is attached via serial USB serial port and a configured MQTT broker is available.
+The GQ radiation monitor is polled every 60 seconds unless the "repeat" option is changed.
