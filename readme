@@ -1,3 +1,0 @@
-
-
-Add the gnu cc compiler with the command "apk add gcc libc-dev" then build with the command "cc gmc320.c -o gmc320"
