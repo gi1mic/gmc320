@@ -1,13 +1,5 @@
 /* sensor:
  * Based on some code from Christoph Haas
-  - platform: command_line
-    name: GMC-320
-    command: >
-      /root/addons/a.out /dev/ttyUSB0
-    json_attributes:
-      - CPM
-      - TEMP
-      - VOLT
 */
 
 #include <stdio.h>
