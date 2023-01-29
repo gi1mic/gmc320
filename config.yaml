@@ -1,5 +1,5 @@
-name: "GMC 3xx Radation Monitor"
-description: "Radation Monitor Sensor Interface"
+name: "GMC 3xx Radiation Monitor"
+description: "Radiation Monitor Sensor Interface"
 version: "1.0.0"
 slug: "gmc3xx_monitor"
 arch:
