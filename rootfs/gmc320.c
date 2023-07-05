@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
@@ -208,8 +209,23 @@ int main(int argc, char *argv[]) {
 		printf("You need to specify the serial device used by the GMC radation monotor i.e. %s /dev/ttyUSB0\n", argv[0]);
 		return 1;
 	}
+	int baudrate = 115200;
+	char* p;
+	// try parse baudrate from argv
+	if (argc >= 3){
+		if(strlen(argv[2]) > 0){
+			long argv2 = strtol(argv[2], &p, 10);
+			if (*p != '\0' || errno != 0) {
+			    	printf("failed to parse baudrate, fallback to default");
+				baudrate = 115200;
+			}
+			baudrate = (int)argv2;
+		}
+	}
+
+	
 //	serial_port = gmc_open("/dev/ttyUSB0", 19200);
-	serial_port = gmc_open(argv[1], 19200);
+	serial_port = gmc_open(argv[1], (int)baudrate);
 	if (serial_port == -1) {
 		printf("Cannot open specified serial device\n");
 		return 1;
