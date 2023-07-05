@@ -3,7 +3,7 @@ GQ-RFC1201
 
 GQ Geiger Counter Communication Protocol
 ***************************************************
-Ver 1.10
+Ver 1.40    Jan-2015
 
 
 Status of this Memo
@@ -26,13 +26,19 @@ Abstract
 Serial Port configuration
 **************************
 
-The serial port communication is based on a fixed baud rate.
+For the GMC-300 V3.xx and earlier version, the serial port communication is based on a fixed baud rate.
 
 Baud: 57600
 Data bit: 8
 Parity: None
 Stop bit: 1
 Control: None
+
+For the GMC-300 Plus V4.xx and later version firmware,  115200 BPS is used.
+
+For GMC-320, the serial port communication baud rate is variable. It should be one of the followings:
+
+1200,2400,4800,9600,14400,19200,28800,38400,57600,115200 BPS.  The factory default is 115200 BPS.
 
 
 **************************
@@ -202,3 +208,144 @@ Return: 0xAA
 
 Firmware supported: GMC-280, GMC-300 Re.2.20 or later
 
+
+14. Set realtime clock year
+
+command: <SETDATEYY[D0]>>
+
+	D0 is the year value in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+
+15. Set realtime clock month
+
+command: <SETDATEMM[D0]>>
+
+	D0 is the month value in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+
+16. Set realtime clock day
+
+command: <SETDATEDD[D0]>>
+
+	D0 is the day of the month value in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+17. Set realtime clock hour
+
+command: <SETTIMEHH[D0]>>
+
+	D0 is the hourvalue in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+18. Set realtime clock minute
+
+command: <SETTIMEMM[D0]>>
+
+	D0 is the minute value in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+
+
+19. Set realtime clock second
+
+command: <SETTIMESS[D0]>>
+
+	D0 is the second value in hexdecimal
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.2.23 or later
+
+
+20. Reset unit to factory default
+
+command: <FACTORYRESET>>
+
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.3.00 or later
+
+
+21. Reboot unit
+
+command: <REBOOT>>
+
+	
+Return: None
+
+Firmware supported: GMC-280, GMC-300 Re.3.00 or later
+
+
+22. Set year date and time
+
+command: <SETDATETIME[YYMMDDHHMMSS]>>
+
+	
+Return: 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.3.00 or later
+
+
+
+23. Get year date and time
+
+command: <GETDATETIME>>
+
+	
+Return: Seven bytes data: YY MM DD HH MM SS 0xAA
+
+Firmware supported: GMC-280, GMC-300 Re.3.00 or later
+
+
+
+24. Get temperature
+
+command: <GETTEMP>>
+
+Return: Four bytes celsius degree data in hexdecimal: BYTE1,BYTE2,BYTE3,BYTE4
+	Here: BYTE1 is the integer part of the temperature.
+	      BYTE2 is the decimal part of the temperature.
+	      BYTE3 is the negative signe if it is not 0.  If this byte is 0, the then current temperture is greater than 0, otherwise the temperature is below 0.
+`	      BYTE4 always 0xAA
+
+Firmware supported: GMC-320 Re.3.01 or later
+
+
+25. Get gyroscope data
+
+command: <GETGYRO>>
+
+Return: Seven bytes gyroscope data in hexdecimal: BYTE1,BYTE2,BYTE3,BYTE4,BYTE5,BYTE6,BYTE7
+	Here: BYTE1,BYTE2 are the X position data in 16 bits value. The first byte is MSB byte data and second byte is LSB byte data.
+	      BYTE3,BYTE4 are the Y position data in 16 bits value. The first byte is MSB byte data and second byte is LSB byte data.
+	      BYTE5,BYTE6 are the Z position data in 16 bits value. The first byte is MSB byte data and second byte is LSB byte data.
+	      BYTE7 always 0xAA
+
+Firmware supported: GMC-320 Re.3.01 or later
+
+
+26. Power ON
+
+Command: <POWERON>>
+
+Return: none
+
+Firmware supported: GMC-280, GMC-300, GMC-320 Re.3.10 or later
