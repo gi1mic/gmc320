@@ -208,8 +208,8 @@ int main(int argc, char *argv[]) {
 		printf("You need to specify the serial device used by the GMC radation monotor i.e. %s /dev/ttyUSB0\n", argv[0]);
 		return 1;
 	}
-//	serial_port = gmc_open("/dev/ttyUSB0", 19200);
-	serial_port = gmc_open(argv[1], 19200);
+
+	serial_port = gmc_open(argv[1], argv[1]);
 	if (serial_port == -1) {
 		printf("Cannot open specified serial device\n");
 		return 1;
