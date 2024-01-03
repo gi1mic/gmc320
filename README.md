@@ -1,66 +1,51 @@
 # GQ Radiation Monitor addon for Homeassistant
+This is adding a GQ GMC-320 (and GMC-300+, ...) radiation monitor to homeassistant. It should work with other devices from the same manufacturer.
 
-This is a first pass at adding a GQ GMC-320 radiation monitor to homeassistant. It should work with other devices from the same manufacturer.
-
-The device is attached to the HA machine via a USB port, where it will appear as a USB serial device. The code then queries the monitor on a regular period and publishes the returned data to the specified MQTT broker. The baud rate on the monitor should be set to 115200.
-
-Note: While this works, I still have a few things to figure out like the correct format for automatic MQTT device discovery and how a single sensor can report multiple values. So basically this is just a place holder for my code while I work on it!
+The device is attached to the HA machine via a USB port, where it will appear as a USB serial device. The code then queries the monitor on a regular period and publishes the returned data to the HA API.
+The baud rate on the monitor should ideally be set to 115200. Make sure the config on the device is set to the same baud rate configured in the addon configuration.
 
 ## Building / Installation
-
 This HA addon will automatically add the build tools, download the latest source, compile, install and run the gmc3xx application on the local HA machine.
 
 ## System Dependencies
-
 **None**
 
 ## Addon Configuration
-
 You need to specify the server, user and password for the MQTT broker. A user-name and password is mandatory. The server defaults to localhost:1883.
 
 Note: There is no parameter checking, so if you get anything wrong the add-on will not start.
 
-# Homeassistant configuation
-Add the following to your configuration.yaml file changing the unit serial number to match the one returned by your device (this is reported in the logs). The cpm value is probably the only one most people need, the rest are there just because they are reported back by the hardware:
+# Sensor usage
+You can add the following to your ESPHome device yaml changing the unit serial number to match the one returned by your device (this is reported in the logs). That way you can have a display showing the CPM value.
 
 ```
-mqtt:
-  sensor:
-    - name: "GMC3xx.cpm"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "cpm"
-      value_template: "{{ value_json.cpm }}"
-    - name: "GMC3xx.voltage"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "V"
-      value_template: "{{ value_json.volt }}"
-    - name: "GMC3xx.version"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "Ver"
-      value_template: "{{ value_json.version }}"
-    - name: "GMC3xx.serial"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "#"
-      value_template: "{{ value_json.serial }}"
-    - name: "GMC3xx.temp"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "c"
-      value_template: "{{ value_json.temp }}"
-    - name: "GMC3xx.x"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "x"
-      value_template: "{{ value_json.x }}"
-    - name: "GMC3xx.y"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "y"
-      value_template: "{{ value_json.y }}"
-    - name: "GMC3xx.z"
-      state_topic: "homeassistant/sensor/gmc3xx_<unit serial number>"
-      unit_of_measurement: "z"
-      value_template: "{{ value_json.z }}"
+sensor:
+  - platform: homeassistant
+    id: cpm
+    entity_id: sensor.gmc3xx_f4880a454eb9
 ```
+
+The sensor state will be updated every 60 seconds (or whatever you set the repeat option to).
+The cpm value (state) is probably the only one most people need, the rest are there just because they are reported back by the hardware.
+The full state content will be in the format:
+```
+{
+  "state" : 26, // cpm
+  "attributes": {
+    "unit_of_measurement" : "cpm", // unit of measurement
+    "version" : "GMC-300Re 4.15", // version of the device
+    "serial" : "f4880a454eb9", // serial number of the device
+    "temp" : 0.0, // temperature
+    "volt" : 4.0, // battery voltage
+    "x" : 0, // gyro X
+    "y" : 43520, // gyro Y
+    "z" : 256 // gyro Z
+  }
+}
+```
+
+Then simply use the value like `id(cpm).state` in your config.
 
 ## Running
-
 The application will automatically run if a GQ radiation monitor is attached via serial USB serial port and a configured MQTT broker is available.
 The GQ radiation monitor is polled every 60 seconds unless the "repeat" option is changed.
