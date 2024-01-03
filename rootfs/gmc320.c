@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
@@ -204,41 +205,62 @@ int setDateTime(int device) {
 
 int main(int argc, char *argv[]) {
 
-	if (argc != 2) {
-		printf("You need to specify the serial device used by the GMC radation monotor i.e. %s /dev/ttyUSB0\n", argv[0]);
+	if (argc < 2) {
+		printf("You need to specify at least the serial device used by the GMC radiation monitor i.e. %s /dev/ttyUSB0\n", argv[0]);
 		return 1;
 	}
+	int baudrate = 115200;
+	char* p;
+	// try parse baudrate from argv
+	if (argc >= 3){
+		if(strlen(argv[2]) > 0){
+			long argv2 = strtol(argv[2], &p, 10);
+			if (*p != '\0' || errno != 0) {
+                //printf("failed to parse baud rate, fallback to default");
+				baudrate = 115200;
+			} else {
+			    baudrate = (int)argv2;
+			}
+		}
+	}
+
+	
 //	serial_port = gmc_open("/dev/ttyUSB0", 19200);
-	serial_port = gmc_open(argv[1], 19200);
+	serial_port = gmc_open(argv[1], (int)baudrate);
 	if (serial_port == -1) {
 		printf("Cannot open specified serial device\n");
 		return 1;
 	};
+
+	int cpm = gmc_get_cpm(serial_port);
 	printf("{");
-		char version[20];
-		gmc_get_version(serial_port, version);
-		printf(" \"version\" : \"%s\",", version);
+	    printf(" \"state\" : %i,",cpm);
 
-		char serialNumber[20];
-		gmc_get_serial(serial_port, serialNumber);
-		printf(" \"serial\" : \"%s\",",serialNumber);
+        printf("\"attributes\": {");
+            printf(" \"unit_of_measurement\" : \"cpm\",");
 
-		int cpm = gmc_get_cpm(serial_port);
-		printf(" \"cpm\" : %i,",cpm);
+            char version[20];
+            gmc_get_version(serial_port, version);
+            printf(" \"version\" : \"%s\",", version);
 
-		float temp =gmc_get_temperature(serial_port);
-		printf(" \"temp\" : %.1f,", temp);
+            char serialNumber[20];
+            gmc_get_serial(serial_port, serialNumber);
+            printf(" \"serial\" : \"%s\",",serialNumber);
 
-		float volt = gmc_get_volt(serial_port)/10;
-		printf(" \"volt\" : %0.1f,", volt);
+            float temp =gmc_get_temperature(serial_port);
+            printf(" \"temp\" : %.1f,", temp);
 
-		Gyro_Sensor gyro;
-		gmc_get_gyro(serial_port, &gyro);
-		printf(" \"x\" : %d,\"y\" : %d, \"z\" : %d", gyro.x, gyro.y, gyro.z);
+            float volt = gmc_get_volt(serial_port)/10;
+            printf(" \"volt\" : %0.1f,", volt);
 
-		printf(" }");
-		printf("\r\n");
-		setDateTime(serial_port);
+            Gyro_Sensor gyro;
+            gmc_get_gyro(serial_port, &gyro);
+            printf(" \"x\" : %d,\"y\" : %d, \"z\" : %d", gyro.x, gyro.y, gyro.z);
+        printf(" }");
+
+    printf(" }");
+    printf("\r\n");
+    setDateTime(serial_port);
 	gmc_close(serial_port);
 
   return 0; // success

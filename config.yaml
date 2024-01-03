@@ -10,20 +10,16 @@ arch:
   - i386
 options:
   port: "/dev/ttyUSB0"
-  mqtt_server: "localhost"
-  mqtt_port: 1883
-  mqtt_user: "user"
-  mqtt_password: "password"
+  baudrate: 115200
   repeat: "60"
 schema:
   port: str
-  mqtt_server: str
-  mqtt_port: int
-  mqtt_user: str
-  mqtt_password: str
+  baudrate: int
   repeat: int
 init: false
 startup: once
 uart: true
 host_network: true
 video: false
+homeassistant_api: true
+hassio_api: false

@@ -2,34 +2,36 @@
 # ==============================================================================
 # Start gmc320 service
 # ==============================================================================
-CONFIG_PATH=/data/options.json
 
 PORT="$(bashio::config 'port')"
-MQTT_SERVER="$(bashio::config 'mqtt_server')"
-MQTT_PORT="$(bashio::config 'mqtt_port')"
-MQTT_USER="$(bashio::config 'mqtt_user')"
-MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
+BAUDRATE="$(bashio::config 'baudrate')"
 DELAY="$(bashio::config 'repeat')"
 
-bashio::log.info "Starting gmc3xx"
+set +e
+
+bashio::log.info "Starting gmc3xx, using port ${PORT} and baudrate ${BAUDRATE}"
 
 # Get the device serial number
-SERIAL=$(gmc320 ${PORT} | jq -r .serial)
+RESPONSE=$(gmc320 ${PORT} ${BAUDRATE})
+bashio::log.info "response: ${RESPONSE}"
+SERIAL=$(echo "${RESPONSE}" | jq -r .attributes.serial)
 bashio::log.info "Device serial number: ${SERIAL}"
 
-# Send homeassistant MQTT discovery message
-#bashio::log.info "Sending MQTT discovery message"
-#mosquitto_pub -r -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}/config" -m '{ "state_topic": "homeassistant/sensor/gmc3xx_${SERIAL}/state","cpm": {"name": "Radation", "device_class": None, "unit_of_measurement": "cpm", "icon": "mdi:radioactive", "state_class": "measurement"},"battery": {"name": "Battery", "device_class": "battery", "unit_of_measurement": "%", "icon": None, "state_class": "measurement"}, "temperature": {"name": "Temperature", "device_class": "temperature", "unit_of_measurement": "°C", "icon": None, "state_class": "measurement"} }'
 
-# 'x': {'name': 'x', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
-# 'y': {'name': 'y', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
-# 'z': {'name': 'z', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
-
-
-# Send the readings
+# Send the readings to http://supervisor/core/api
 bashio::log.info "Start sending data"
 while true; do
-	DATA=$(gmc320 ${PORT})
-	mosquitto_pub -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}" -m "${DATA}"
+  bashio::log.info "Requesting data, using port ${PORT} and baudrate ${BAUDRATE}"
+	DATA=$(gmc320 ${PORT} ${BAUDRATE})
+	bashio::log.info "response: ${DATA}"
+	#mosquitto_pub -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}" -m "${DATA}"
+	HTTP_CODE=$(curl -s -X POST -o response.txt -w "%{http_code}" \
+    -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "${DATA}" \
+    "http://supervisor/core/api/states/sensor.gmc3xx_${SERIAL}")
+  HTTP_RESPONSE=$(cat response.txt)
+  bashio::log.info "HA API HTTP code: ${HTTP_CODE}"
+  bashio::log.info "HA API HTTP Response: ${HTTP_RESPONSE}"
 	sleep ${DELAY}
 done
