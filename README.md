@@ -12,10 +12,7 @@ This HA addon will automatically add the build tools, download the latest source
 
 ## System Dependencies
 
-The following should be added to you HA build via the addon store.
-
-- Mosquitto broker
-- Node-RED
+**None**
 
 ## Addon Configuration
 

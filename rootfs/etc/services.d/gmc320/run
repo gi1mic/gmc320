@@ -19,7 +19,7 @@ bashio::log.info "Device serial number: ${SERIAL}"
 
 # Send homeassistant MQTT discovery message
 #bashio::log.info "Sending MQTT discovery message"
-#mosquitto_pub -r -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}/config" -m '{ "state_topic": "homeassistant/sensor/gmc3xx_${SERIAL}/state","cpm": {"name": "Radation", "device_class": None, "unit_of_measurement": "cpm", "icon": "mdi:radioactive", "state_class": "measurement"},"battery": {"name": "Battery", "device_class": "battery", "unit_of_measurement": "%", "icon": None, "state_class": "measurement"}, "temperature": {"name": "Temperature", "device_class": "temperature", "unit_of_measurement": "°C", "icon": None, "state_class": "measurement"} }'
+#mosquitto_pub -r -u ${MQTT_USER} -P ${MQTT_PASSWORD} -p ${MQTT_PORT} -h ${MQTT_SERVER} -t "homeassistant/sensor/gmc3xx_${SERIAL}/config" -m '{ "state_topic": "homeassistant/sensor/gmc3xx_${SERIAL}/state","cpm": {"name": "Radiation", "device_class": None, "unit_of_measurement": "cpm", "icon": "mdi:radioactive", "state_class": "measurement"},"battery": {"name": "Battery", "device_class": "battery", "unit_of_measurement": "%", "icon": None, "state_class": "measurement"}, "temperature": {"name": "Temperature", "device_class": "temperature", "unit_of_measurement": "°C", "icon": None, "state_class": "measurement"} }'
 
 # 'x': {'name': 'x', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \
 # 'y': {'name': 'y', 'device_class': 'None', 'unit_of_measurement': 'deg', 'icon': 'None', 'state_class': 'measurement'}, \

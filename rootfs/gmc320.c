@@ -206,7 +206,7 @@ int setDateTime(int device) {
 int main(int argc, char *argv[]) {
 
 	if (argc != 2) {
-		printf("You need to specify the serial device used by the GMC radation monotor i.e. %s /dev/ttyUSB0\n", argv[0]);
+		printf("You need to specify the serial device used by the GMC radiation monitor i.e. %s /dev/ttyUSB0\n", argv[0]);
 		return 1;
 	}
 	int baudrate = 115200;
@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
 		if(strlen(argv[2]) > 0){
 			long argv2 = strtol(argv[2], &p, 10);
 			if (*p != '\0' || errno != 0) {
-			    	printf("failed to parse baudrate, fallback to default");
+			    	printf("failed to parse baud rate, fallback to default");
 				baudrate = 115200;
 			}
 			baudrate = (int)argv2;
