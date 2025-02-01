@@ -8,7 +8,7 @@ As a temporary measure you can get around this by opening a homeassistant privil
 
 >``ID=$(docker ps -a | grep gmc3xx_monitor | awk '{ print $1 }') && docker exec -it "${ID}" bash``
 
-This will take you into the gmc3xx_monitor docker container. from there you can manually run the command
+This will take you into the gmc3xx_monitor docker container. From there you can manually run the command
  
 >
 >chmod +x /var/run/s6/legacy-services/gmc320/run
