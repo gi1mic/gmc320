@@ -1,6 +1,6 @@
 name: "GMC 3xx Radiation Monitor"
 description: "Radiation Monitor Sensor Interface"
-version: "1.0.1"
+version: "1.0.2"
 slug: "gmc3xx_monitor"
 arch:
   - aarch64
