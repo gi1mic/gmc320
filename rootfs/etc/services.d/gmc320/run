@@ -1,6 +1,6 @@
-#!/command/with-contenv bashio
+#!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Start gmc320 service (#!/usr/bin/with-contenv bashio)
+# Start gmc320 service
 # ==============================================================================
 CONFIG_PATH=/data/options.json
 
