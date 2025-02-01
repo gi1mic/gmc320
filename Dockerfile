@@ -15,4 +15,5 @@ WORKDIR /
 #RUN ls -l
 
 COPY rootfs /
+VOLUME ["run"]
 #CMD [ "run" ]
