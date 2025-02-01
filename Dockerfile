@@ -13,7 +13,7 @@ RUN apk update --no-cache \
 # Copy data
 WORKDIR /
 
-COPY rootfs /
+COPY --chmod=765 rootfs /
 
-RUN chmod +x /etc/services.d/gmc320/run
-RUN chmod +x /etc/services.d/gmc320/finish
+#RUN chmod +x /etc/services.d/gmc320/run
+#RUN chmod +x /etc/services.d/gmc320/finish
