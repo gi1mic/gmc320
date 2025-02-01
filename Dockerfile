@@ -15,5 +15,5 @@ WORKDIR /
 
 COPY --chmod=765 rootfs /
 
-#RUN chmod +x /etc/services.d/gmc320/run
-#RUN chmod +x /etc/services.d/gmc320/finish
+RUN chmod +x /var/run/s6/legacy-services/gmc320/*
+
