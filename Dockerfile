@@ -13,7 +13,8 @@ RUN apk update --no-cache \
 # Copy data
 WORKDIR /
 
-COPY --chmod=765 rootfs /
+COPY rootfs /
 
 RUN chmod +x /var/run/s6/legacy-services/gmc320/*
 
+VOLUME ["/run"]
