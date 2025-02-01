@@ -12,10 +12,8 @@ RUN apk update --no-cache \
 
 # Copy data
 WORKDIR /
-#RUN ls -l
 
 COPY rootfs /
-chmod +x /etc/services.d/gmc320/run
-chmod +x /etc/services.d/gmc320/finish
-#VOLUME ["/run"]
-#CMD [ "run" ]
+
+RUN chmod +x /etc/services.d/gmc320/run
+RUN chmod +x /etc/services.d/gmc320/finish
