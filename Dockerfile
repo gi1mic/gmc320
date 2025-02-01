@@ -15,6 +15,4 @@ WORKDIR /
 
 COPY rootfs /
 
-RUN chmod +x /var/run/s6/legacy-services/gmc320/*
-
 VOLUME ["/run"]
