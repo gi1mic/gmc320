@@ -7,7 +7,7 @@
 *.h text
 *.yaml text
 run text
-finish test
+finish text
 Dockerfile text
 
 # Declare files that will always have CRLF line endings on checkout.
