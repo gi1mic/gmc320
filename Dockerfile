@@ -15,4 +15,4 @@ WORKDIR /
 
 COPY rootfs /
 
-VOLUME ["/run"]
+
