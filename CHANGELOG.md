@@ -2,7 +2,7 @@
 
 ## Release 1.0.3 (2025-02-01)
 
-For reasons that I do not understand at the moment the provided services "run" file is not installed with exec permissions.
+For reasons that I do not understand at the moment the provided services "run" file is not installed with correct exec permissions.
 
 As a temporary measure you can get around this by opening a homeassistant privileged terminal and entering the command
 
