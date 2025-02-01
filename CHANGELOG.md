@@ -8,5 +8,5 @@
 - Added changelog
 - Added repository.yaml
 - Updated docs to state correct serial port speed
-- Added 'VOLUME ["run"]' to the dockerfile
+- Added 'VOLUME ["/run"]' to the dockerfile
  
