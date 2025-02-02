@@ -1,5 +1,8 @@
 # Changelog
 
+## Release 1.0.4 (2025-02-02)
+I just added the manual steps to the Dockerfile to get round the permission issue. It should all work now.....
+
 ## Release 1.0.3 (2025-02-01)
 
 For reasons that I do not understand at the moment the provided services "run" file is not installed with correct permissions (It used to work).
